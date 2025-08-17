@@ -3,8 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ACN2 — Esport Team</title>
-  <meta name="description" content="Site vitrine style Vitality, palette rouge/noir, sections Matchs, Boutique, Joueurs, Partenaires et Shop." />
+  <title>AC2N Gaming</title>
+
+  <!-- Favicon (icône d'onglet) -->
+  <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/Qdpyhd9J/B6-D84865-AC19-4-C86-899-A-B343-B8107-AB3.jpg?v=4">
+  <link rel="shortcut icon" type="image/jpeg" href="https://i.postimg.cc/Qdpyhd9J/B6-D84865-AC19-4-C86-899-A-B343-B8107-AB3.jpg?v=4">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/Qdpyhd9J/B6-D84865-AC19-4-C86-899-A-B343-B8107-AB3.jpg?v=4">
+
+  <meta name="description" content="Site vitrine style Ac2N, palette rouge/noir, sections Matchs, Boutique, Joueurs, Partenaires et Shop." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -89,8 +95,8 @@
   <header>
     <div class="container nav">
       <div class="brand">
-        <div class="logo"><span class="dot"></span></div>
-        <span>ACN2</span>
+        
+        
       </div>
       <nav class="menu">
         <a href="#matches">Matchs</a>
@@ -121,27 +127,214 @@
           </div>
         </div>
         <div class="card">
-          <img src="https://i.postimg.cc/XqMqscFK/3a447a05-3232-4056-88cf-41c92ad76e8f.png" alt="Logo ACN2" style="width:100%;max-width:420px;margin:0 auto;border-radius:12px;" />
+          <img src="https://i.postimg.cc/Qdpyhd9J/B6-D84865-AC19-4-C86-899-A-B343-B8107-AB3.jpg" alt="Logo AC2N" style="width:100%;max-width:420px;margin:0 auto;border-radius:12px;" />
         </div>
       </div>
     </section>
 
-    <section id="matches">
-      <div class="container">
-        <div class="section-head">
-          <h2>Matchs</h2>
-          <a href="#" style="text-decoration:underline; text-underline-offset:4px">Voir tout</a>
-        </div>
-        <div class="grid-3" style="margin-top:18px"></div>
-      </div>
-    </section>
+<section id="matches">
+  <div class="container">
+    <div class="section-head">
+      <h2>Matchs</h2>
+      <a href="#" style="text-decoration:underline; text-underline-offset:4px">Voir tout</a>
+    </div>
 
-    <section id="joueurs">
-      <div class="container">
-        <h2>Joueurs</h2>
-        <div class="grid-3" style="margin-top:18px"></div>
-      </div>
-    </section>
+    <div id="matchesGrid" class="grid-3" style="margin-top:18px"></div>
+  </div>
+
+  <style>
+    #matches .match-card{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:14px;
+      display:grid;
+      gap:10px;
+    }
+    #matches .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    #matches .teams{display:flex;align-items:center;gap:10px;font-weight:800}
+    #matches .vs{opacity:.7;font-weight:600}
+    #matches .score{font-weight:800;font-size:18px}
+    #matches .meta{opacity:.85;font-size:13px}
+    #matches .badge{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800}
+    #matches .win{background:rgba(76,175,80,.18);border:1px solid rgba(76,175,80,.35);color:#c8f7ce}
+  </style>
+
+  <script>
+    (function(){
+      const matches = [
+        { date:"2025-08-10", game:"COD", tournament:"Match amical", teamA:"AC2N", teamB:"HiNaRiiX", score:"4 - 1", status:"won" },
+        { date:"2025-08-05", game:"COD", tournament:"Match amical", teamA:"AC2N", teamB:"GGF", score:"5 - 0", status:"won" },
+        { date:"2025-07-30", game:"COD", tournament:"Match amical", teamA:"AC2N", teamB:"Imperium", score:"2 - 1", status:"won" },
+      ];
+
+      const grid = document.getElementById('matchesGrid');
+
+      function formatDate(iso){
+        try{
+          const d = new Date(iso);
+          return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+        }catch(e){ return iso; }
+      }
+
+      function render(){
+        grid.innerHTML = '';
+        matches
+          .sort((a,b)=> new Date(b.date) - new Date(a.date))
+          .forEach(m=>{
+            const el = document.createElement('article');
+            el.className = 'match-card';
+            el.innerHTML = `
+              <div class="row">
+                <div class="meta"><b>${formatDate(m.date)}</b> · ${m.game} · ${m.tournament}</div>
+                <span class="badge win">Victoire</span>
+              </div>
+              <div class="row">
+                <div class="teams">
+                  <span>${m.teamA}</span><span class="vs">vs</span><span>${m.teamB}</span>
+                </div>
+                <div class="score">${m.score}</div>
+              </div>
+            `;
+            grid.appendChild(el);
+          });
+      }
+
+      render();
+    })();
+  </script>
+</section>
+
+<section id="joueurs">
+  <div class="container">
+    <div class="section-head">
+      <h2>Joueurs</h2>
+    </div>
+
+    <div id="playersGrid" class="players-grid" style="margin-top:18px"></div>
+  </div>
+
+  <style>
+    /* --- Styles limités à la section Joueurs --- */
+    #joueurs .players-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+      gap:16px;
+    }
+    #joueurs .player-card{
+      position:relative;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.10);
+      padding:14px 12px;
+      text-align:center;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      overflow:hidden;
+    }
+    #joueurs .player-card::after{
+      content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+      background:linear-gradient(90deg, transparent, var(--accent2), transparent);
+      opacity:.5;
+    }
+    #joueurs .player-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 12px 24px rgba(0,0,0,.35);
+      border-color:rgba(240,58,62,.35);
+    }
+
+#joueurs .avatar-wrap{
+  width:110px;
+  height:110px;
+  margin:0 auto 8px;
+  position:relative;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+}
+
+#joueurs .avatar{
+  width:98px;
+  height:98px;
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  box-shadow:0 8px 18px rgba(0,0,0,.35);
+  background:#0f0f10;
+}
+
+
+    #joueurs .name{font-weight:800;font-size:14px;letter-spacing:.2px}
+
+    /* Badge Capitaine */
+    #joueurs .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 9px;border-radius:999px;font-size:11px;font-weight:800;
+      border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);margin-top:6px
+    }
+    #joueurs .badge.captain{
+      border-color:rgba(240,58,62,.45);
+      background:rgba(240,58,62,.12);
+      box-shadow:0 0 0 3px rgba(240,58,62,.10) inset;
+    }
+    #joueurs .crown{width:14px;height:14px;display:inline-block;vertical-align:-2px}
+
+    /* plus compact sur mobile */
+    @media (max-width:520px){
+      #joueurs .avatar-wrap{width:96px;height:96px}
+      #joueurs .avatar{width:86px;height:86px}
+      #joueurs .name{font-size:13px}
+    }
+  </style>
+
+  <script>
+    (function(){
+      // ⭐ URLs postimg fournies par toi
+      const players = [
+        { name:"Scredy",   img:"https://i.postimg.cc/4xzBYxJW/logo-B-ACN.jpg",   captain:true }, // chef d'équipe
+        { name:"Skyzo",    img:"https://i.postimg.cc/J4hL3Sy3/1.jpg" },
+        { name:"Psykz",    img:"https://i.postimg.cc/FHMX4RTG/2.jpg" },
+        { name:"Mystiik",  img:"https://i.postimg.cc/76Dv5R82/3.jpg" },
+        { name:"Charlo",   img:"https://i.postimg.cc/SRTHtNX6/9.jpg" },
+        { name:"Chinwaa",  img:"https://i.postimg.cc/GhfZFtnr/CHINWAA.jpg" },
+        { name:"Joker",    img:"https://i.postimg.cc/g261NpGh/IMG-3473.jpg" },
+        { name:"Keeiz",    img:"https://i.postimg.cc/wv9PqsL5/5.jpg" },
+        { name:"Kamikaz",  img:"https://i.postimg.cc/T3mHnccq/6.jpg" },
+        { name:"Johan",    img:"https://i.postimg.cc/ZRY7tzzV/7.jpg" },
+        { name:"Gaby",     img:"https://i.postimg.cc/hvf2v8jm/8.jpg" },
+        { name:"Keplaiz",  img:"https://i.postimg.cc/xj4s7Zx3/Keplaiz.jpg" }
+      ];
+
+      const grid = document.getElementById('playersGrid');
+
+      const crownSVG = `
+        <svg class="crown" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3 7l4.5 3.5L10 5l4 6 4.5-3.5 2.5 11H.5L3 7zM3 19h18v2H3v-2z"/>
+        </svg>`;
+
+      function card(p){
+        const el = document.createElement('article');
+        el.className = 'player-card';
+        el.innerHTML = `
+          <div class="avatar-wrap">
+            
+            <img class="avatar" loading="lazy" src="${p.img}" alt="${p.name}">
+          </div>
+          <div class="name">${p.name}</div>
+          ${p.captain ? `<span class="badge captain">${crownSVG} Capitaine</span>` : ``}
+        `;
+        return el;
+      }
+
+      grid.innerHTML = '';
+      // Capitaine d'abord, puis tri alpha
+      players
+        .sort((a,b)=> (b.captain?1:0)-(a.captain?1:0) || a.name.localeCompare(b.name))
+        .forEach(p => grid.appendChild(card(p)));
+    })();
+  </script>
+</section>
+
+
 
     <section id="partners">
       <div class="container">
@@ -154,17 +347,334 @@
       </div>
     </section>
 
+    <!-- ===== BOUTIQUE ===== -->
     <section id="shop">
+      <style>
+/* Styles limités à la boutique */
+#shop .shop-head{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#shop .shop-grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:16px;margin-top:18px}
+@media(min-width:600px){#shop .shop-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:960px){#shop .shop-grid{grid-template-columns:repeat(3,1fr)}}
+#shop .card{background:transparent;border:1px solid rgba(255,255,255,.10);border-radius:16px;overflow:hidden}
+
+/* ✅ ICI: rendre le fond derrière l'image transparent */
+#shop .thumb{
+  aspect-ratio:4/3;
+  background: transparent !important;   /* ← le blanc était ici */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+}
+#shop .thumb img{
+  width:100%;
+  height:100%;
+  object-fit:contain;                   /* ne pas rogner */
+  background:transparent;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.25));
+}
+
+        #shop article.card:hover .thumb img{
+          transform:scale(1.03);           /* léger zoom au survol */
+        }
+        /* ============================================== */
+        #shop .content{padding:14px;display:grid;gap:6px}
+        #shop .title{font-weight:700}
+        #shop .price{color:var(--accent2);font-weight:800}
+        #shop .actions{display:flex;gap:10px;margin-top:8px}
+        #shop .btn.buy{background:var(--accent);border:1px solid transparent;color:#fff;border-radius:10px;padding:10px 14px;cursor:pointer}
+      </style>
+
       <div class="container">
-        <div class="card" style="display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+        <div class="shop-head card">
           <div>
-            <h3 style="margin:0;font-size:26px">Nouveaux maillots ACN2</h3>
-            <p style="margin:8px 0 0;opacity:.85">Représente la team avec le drop rouge & noir.</p>
+            <h3 style="margin:0;font-size:26px">Boutique AC2N</h3>
+            <p style="margin:8px 0 0;opacity:.85">Produits officiels — rouge & noir.</p>
           </div>
-          <a class="btn primary" href="#">Accéder au shop</a>
+        </div>
+
+        <div class="shop-grid" id="shopGrid">
+          <!-- Banderole -->
+          <article class="card">
+            <div class="thumb">
+              <img loading="lazy" src="https://i.postimg.cc/jdjQcjqg/Capture-Photoroom-2.png" alt="Banderole AC2N">
+            </div>
+            <div class="content">
+              <div class="title">Banderole</div>
+              <div class="price">40 €</div>
+              <div class="actions">
+                <button class="btn buy"
+                        data-id="banderole"
+                        data-name="Banderole AC2N"
+                        data-price="40">
+                  Acheter avec PayPal
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Mug -->
+          <article class="card">
+            <div class="thumb">
+              <img loading="lazy" src="https://i.postimg.cc/Wp8w0ZVq/Capture-Photoroom-1.png" alt="Mug AC2N">
+            </div>
+            <div class="content">
+              <div class="title">Mug</div>
+              <div class="price">25 €</div>
+              <div class="actions">
+                <button class="btn buy"
+                        data-id="mug"
+                        data-name="Mug AC2N"
+                        data-price="25">
+                  Acheter avec PayPal
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Maillot -->
+          <article class="card">
+            <div class="thumb">
+              <img loading="lazy" src="https://i.postimg.cc/YSFxFy2t/Capture-Photoroom.png" alt="Maillot AC2N">
+            </div>
+            <div class="content">
+              <div class="title">Maillot</div>
+              <div class="price">80 €</div>
+              <div class="actions">
+                <button class="btn buy"
+                        data-id="maillot"
+                        data-name="Maillot AC2N"
+                        data-price="80">
+                  Acheter avec PayPal
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Casquette -->
+          <article class="card">
+            <div class="thumb">
+              <img loading="lazy" src="https://i.postimg.cc/m2635Gtb/IMG-3475-Photoroom.png" alt="Casquette AC2N">
+            </div>
+            <div class="content">
+              <div class="title">Casquette</div>
+              <div class="price">30 €</div>
+              <div class="actions">
+                <button class="btn buy"
+                        data-id="casquette"
+                        data-name="Casquette AC2N"
+                        data-price="30">
+                  Acheter avec PayPal
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Coque -->
+          <article class="card">
+            <div class="thumb">
+              <img loading="lazy" src="https://i.postimg.cc/Nj36Q76S/IMG-3473-Photoroom.png" alt="Coque de téléphone AC2N">
+            </div>
+            <div class="content">
+              <div class="title">Coque de téléphone</div>
+              <div class="price">25 €</div>
+              <div class="actions">
+                <button class="btn buy"
+                        data-id="coque"
+                        data-name="Coque de téléphone AC2N"
+                        data-price="25">
+                  Acheter avec PayPal
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- Bloc de confirmation / instructions -->
+        <div id="orderConfirm" class="card" style="display:none;margin-top:18px">
+          <h3 style="margin:0 0 8px">Merci ! Votre commande est en cours 🔔</h3>
+          <p style="margin:0 0 8px">Numéro de commande : <b id="orderNumber">—</b></p>
+          <p id="discordQuick" style="margin:0 0 8px;opacity:.95"></p>
+          <p id="payAlt" style="margin:0 0 8px;display:none">
+            La page de paiement ne s'est pas ouverte ? <a id="payNowLink" href="#" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Payer maintenant</a>
+          </p>
+
+          <div style="margin-top:8px">
+            <strong>Instructions :</strong>
+            <ul style="margin:8px 0 0 18px;opacity:.95">
+              <li>Le paiement s'ouvre dans un <b>nouvel onglet</b>. Réalisez le règlement sur PayPal.</li>
+              <li>Revenez sur cet onglet et <b>conservez le Numéro de commande</b>.</li>
+              <li>Contactez-nous sur Discord avec : <em>Numéro de commande</em>, <em>Pseudo/ID</em>, <em>Article</em>, <em>Email</em>, <em>adresse d’expédition</em>.</li>
+            </ul>
+          </div>
+
+          <div style="border-top:1px solid rgba(255,255,255,.1);margin:12px 0 10px"></div>
+
+          <p style="margin:0 6px 8px 0;opacity:.9">Vous voulez un bon de commande par email ?</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <input id="orderEmail" class="input" type="email" placeholder="Votre email" style="flex:1;min-width:240px">
+            <button id="getInvoiceBtn" class="btn primary">Obtenir mon bon de commande</button>
+          </div>
+        </div>
+
+        <!-- Bon de commande -->
+        <div id="invoiceCard" class="card" style="display:none;margin-top:12px">
+          <h3 style="margin:0 0 8px">Bon de commande</h3>
+          <p style="margin:0 6px 8px 0;opacity:.9">Merci pour votre achat.</p>
+          <p style="margin:0 0 6px">Numéro de commande : <b id="invoiceOrder">—</b></p>
+          <p style="margin:10px 0 0">
+            Conservez ce numéro et contactez-nous sur <a href="https://discord.gg/Dfyq5wqn7y" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Discord</a> pour valider votre commande.
+          </p>
+          <p style="margin:10px 0 0;opacity:.9">
+            Merci de bien vouloir nous fournir vos informations d’expédition et le nom à inscrire le cas échéant.
+          </p>
         </div>
       </div>
+
+      <!-- Script de la boutique -->
+      <script>
+        (function(){
+          // Email PayPal (ou Merchant ID) + Discord
+          const BUSINESS = "Ac2NGaming@gmail.com"; // ← remplace par TON email PayPal
+          const DISCORD_URL = "https://discord.gg/Dfyq5wqn7y";
+          const CURRENCY = "EUR";
+
+          let lastPayUrl = null; // pour réouvrir la page si bloquée
+
+          function makeOrderId(){
+            const d = new Date();
+            const pad = n => String(n).padStart(2,"0");
+            const date = d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+            const rand = Math.floor(Math.random()*1e6).toString().padStart(6,"0");
+            return "AC2N-"+date+"-"+rand;
+          }
+
+          function buildPayPalUrl({name, price, orderId, returnUrl, cancelUrl}){
+            return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick"
+              + "&business=" + encodeURIComponent(BUSINESS)
+              + "&item_name=" + encodeURIComponent(name)
+              + "&amount=" + encodeURIComponent((+price).toFixed(2))
+              + "&currency_code=" + CURRENCY
+              + "&invoice=" + encodeURIComponent(orderId)
+              + "&return=" + encodeURIComponent(returnUrl)
+              + "&cancel_return=" + encodeURIComponent(cancelUrl);
+          }
+
+          function showConfirmation(orderId){
+            const box = document.getElementById("orderConfirm");
+            const num = document.getElementById("orderNumber");
+            const dq  = document.getElementById("discordQuick");
+            const payAlt = document.getElementById("payAlt");
+            const payNowLink = document.getElementById("payNowLink");
+            if(!box || !num) return;
+
+            num.textContent = orderId;
+            if (dq){
+              dq.innerHTML =
+                `Contactez-nous sur <a href="${DISCORD_URL}" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:3px">Discord</a>
+                 avec <b>votre Numéro de commande</b>.`;
+            }
+            // si on a une URL de paiement prête, on affiche l'alternative clic
+            if (payAlt && payNowLink && lastPayUrl){
+              payAlt.style.display = "";
+              payNowLink.href = lastPayUrl;
+              payNowLink.onclick = (e)=>{ /* juste au cas où */ };
+            }
+
+            box.style.display = "";
+            document.getElementById("shop").scrollIntoView({behavior:"smooth", block:"start"});
+          }
+
+          function buy(product){
+            const orderId = makeOrderId();
+
+            // Sauvegarde locale (pour le bon de commande)
+            localStorage.setItem("ac2n_last_order", JSON.stringify({
+              id: orderId,
+              productId: product.id,
+              name: product.name,
+              price: product.price,
+              ts: Date.now()
+            }));
+
+            // Prépare les URLs de retour
+            const base = location.origin + location.pathname + "#shop";
+            const returnUrl = base + "?paid=1&order=" + encodeURIComponent(orderId);
+            const cancelUrl = base + "?paid=0&order=" + encodeURIComponent(orderId);
+
+            // Construit l'URL PayPal et ouvre dans un NOUVEL ONGLET
+            lastPayUrl = buildPayPalUrl({
+              name: product.name,
+              price: product.price,
+              orderId,
+              returnUrl,
+              cancelUrl
+            });
+
+            // 1) Affiche tout de suite le numéro + instructions sur CET onglet
+            showConfirmation(orderId);
+
+            // 2) Ouvre la page de paiement dans un autre onglet
+            const win = window.open(lastPayUrl, "_blank", "noopener");
+            // si bloqué, on laisse l'utilisateur cliquer sur "Payer maintenant"
+            if(!win){
+              const payAlt = document.getElementById("payAlt");
+              const payNowLink = document.getElementById("payNowLink");
+              if (payAlt && payNowLink){
+                payAlt.style.display = "";
+                payNowLink.href = lastPayUrl;
+              }
+            }
+          }
+
+          // Bind boutons acheter
+          document.querySelectorAll("#shop .btn.buy").forEach(btn=>{
+            btn.addEventListener("click", ()=>{
+              const price = Number(btn.dataset.price || "0");
+              buy({
+                id: btn.dataset.id,
+                name: btn.dataset.name || "Article",
+                price: isFinite(price) ? price : 0
+              });
+            });
+          });
+
+          // Gestion du retour PayPal (dans l'autre onglet)
+          function parseHashQuery(){
+            const idx = location.hash.indexOf("?");
+            if(idx === -1) return {};
+            const q = new URLSearchParams(location.hash.slice(idx+1));
+            const obj = {};
+            for(const [k,v] of q.entries()) obj[k]=v;
+            return obj;
+          }
+
+          (function handleReturn(){
+            if(location.hash.startsWith("#shop")){
+              const qp = parseHashQuery();
+              // Si l'autre onglet revient sur #shop?paid=1&order=..., on remonte l'info ici si nécessaire.
+              if(qp.order){
+                // On s'assure d'afficher le numéro (utile si l'utilisateur a rechargé)
+                showConfirmation(qp.order);
+              }
+            }
+          })();
+
+          // Bon de commande (affichage local)
+          document.getElementById("getInvoiceBtn").addEventListener("click", ()=>{
+            const email = (document.getElementById("orderEmail").value || "").trim();
+            if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ alert("Email invalide."); return; }
+            const last = JSON.parse(localStorage.getItem("ac2n_last_order")||"{}");
+            const orderId = document.getElementById("orderNumber").textContent || last.id || "—";
+
+            // (Optionnel) ici, tu peux envoyer un email avec EmailJS.
+            document.getElementById("invoiceOrder").textContent = orderId;
+            document.getElementById("invoiceCard").style.display = "";
+          });
+        })();
+      </script>
     </section>
+    <!-- ===== fin Boutique ===== -->
 
     <!-- ===== Mon compte ===== -->
     <section id="account" style="display:none">
@@ -257,8 +767,7 @@
     <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px">
       <div>
         <div class="brand" style="margin-bottom:10px">
-          <div class="logo"><span class="dot"></span></div>
-          <span>ACN2</span>
+          
         </div>
         <span style="display:inline-block;background:var(--bg);border:1px solid rgba(255,255,255,.12);padding:8px 10px;border-radius:999px;opacity:.9">
           © <span id="year"></span> — Tous droits réservés
@@ -336,7 +845,6 @@
             <strong>Code de vérification</strong>
             <p class="pwd-hint">Saisi le code reçu par email.</p>
             <label>Code à 6 chiffres</label>
-            <!-- pattern corrigé -->
             <input type="text" id="fpCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required title="Entrez 6 chiffres">
             <div style="display:flex;gap:8px;margin-top:10px">
               <button type="submit" class="btn primary" style="flex:1">Vérifier</button>
@@ -388,28 +896,19 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    /* ===== Config EmailJS (facultatif mais recommandé) =====
-       - EMAILJS_PUBLIC_KEY : clé publique (ex: "xxxxxxxxxxxxxxxxx")
-       - EMAILJS_SERVICE_ID : service (ex: "service_xxx")
-       - EMAILJS_TEMPLATE_ID: template (ex: "template_xxx") avec variables: to_email, code
-       Si ces 3 valeurs restent vides, le code s'affichera via alert() pour test.
-    */
-    const EMAILJS_PUBLIC_KEY = "d89KnDXgorOiAo_Zq";             // <-- ta clé publique
-    const EMAILJS_SERVICE_ID = "service_iy06pp9";               // <-- ton service id
-    const EMAILJS_TEMPLATE_ID = "template_08rnz6r";             // <-- ton template id
+    const EMAILJS_PUBLIC_KEY = "d89KnDXgorOiAo_Zq";
+    const EMAILJS_SERVICE_ID = "service_iy06pp9";
+    const EMAILJS_TEMPLATE_ID = "template_08rnz6r";
     let EMAILJS_READY = false;
     try{
       if(EMAILJS_PUBLIC_KEY){
-        // ✅ compat v3/v4 (n'affecte pas le reste)
         if (typeof emailjs !== 'undefined' && emailjs && typeof emailjs.init === 'function') {
-          // certains environnements exigent l'objet { publicKey }
           emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
           EMAILJS_READY = true;
         }
       }
     }catch(e){ EMAILJS_READY = false; }
 
-    /* ====== Modal + onglets ====== */
     const modal = document.getElementById('loginModal');
     document.getElementById('openLogin').onclick = (e)=>{ e.preventDefault(); modal.style.display='flex'; };
     document.getElementById('closeLogin').onclick = ()=> modal.style.display='none';
@@ -428,9 +927,8 @@
     tabLoginBtn.onclick = ()=> setTab(true);
     tabSignupBtn.onclick = ()=> setTab(false);
 
-    /* ====== Storage ====== */
-    const USERS_KEY = 'acn2_users';
-    const CURRENT_KEY = 'acn2_current_email';
+    const USERS_KEY = 'ac2n_users';
+    const CURRENT_KEY = 'ac2n_current_email';
     function loadUsers(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY)) || [] }catch(e){ return [] } }
     function saveUsers(list){ localStorage.setItem(USERS_KEY, JSON.stringify(list)); }
     function setCurrent(email){ localStorage.setItem(CURRENT_KEY, email); }
@@ -442,7 +940,7 @@
     function generateId(){
       const rnd = (crypto?.getRandomValues ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.random()*1e9)
                   .toString(16).slice(-6).toUpperCase();
-      return 'ACN2-' + rnd;
+      return 'AC2N-' + rnd;
     }
 
     const fb = document.getElementById('authFeedback');
@@ -450,7 +948,6 @@
       fb.innerHTML = '<div class="card" style="padding:12px;border:1px solid '+(ok?'rgba(76,175,80,.35)':'rgba(240,58,62,.45)')+'">'+text+'</div>';
     }
 
-    /* ====== UI compte ====== */
     function renderAccountUI(){
       const user = getCurrent();
       const navAcc = document.getElementById('navAccount');
@@ -491,7 +988,6 @@
       }
     }
 
-    /* ====== Signup ====== */
     document.getElementById('signupForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = document.getElementById('suEmail').value.trim().toLowerCase();
@@ -520,7 +1016,6 @@
       document.getElementById('signupForm').reset();
     });
 
-    /* ====== Login ====== */
     document.getElementById('loginForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -536,13 +1031,11 @@
       document.getElementById('loginForm').reset();
     });
 
-    /* ====== Déconnexion ====== */
     document.getElementById('btnLogout').addEventListener('click', ()=>{
       localStorage.removeItem(CURRENT_KEY);
       renderAccountUI();
     });
 
-    /* ====== Edit compte ====== */
     const viewBox = document.getElementById('accView');
     const editForm = document.getElementById('accEdit');
     document.getElementById('btnEdit').onclick = ()=>{ viewBox.style.display='none'; editForm.style.display='block'; };
@@ -587,7 +1080,6 @@
       if(wantsChange) alert("Mot de passe mis à jour ✅");
     });
 
-    /* ====== Suppression de compte ====== */
     document.getElementById('btnDelete').addEventListener('click', ()=>{
       if(!confirm("Supprimer définitivement ce compte ?")) return;
       const users = loadUsers();
@@ -600,7 +1092,6 @@
       window.location.hash = '';
     });
 
-    /* ====== Choix avatar ====== */
     let pickedAvatar = null;
     document.querySelectorAll('.pickAvatar').forEach(img=>{
       img.addEventListener('click', ()=>{
@@ -620,7 +1111,6 @@
       document.querySelectorAll('.pickAvatar').forEach(i=>i.style.borderColor='transparent');
     });
 
-    /* ====== Upload avatar ====== */
     const fileInput = document.getElementById('fileAvatar');
     const filePreview = document.getElementById('filePreview');
     fileInput.addEventListener('change', ()=>{
@@ -648,7 +1138,6 @@
       reader.readAsDataURL(f);
     });
 
-    /* ====== Mot de passe oublié – envoi code & étapes ====== */
     const forgotToggle = document.getElementById('forgotToggle');
     const loginForm = document.getElementById('loginForm');
     const step1 = document.getElementById('forgotStep1');
@@ -672,46 +1161,41 @@
     document.getElementById('forgotBack1').addEventListener('click', ()=> showStep(1));
     document.getElementById('forgotBack2').addEventListener('click', ()=> showStep(2));
 
-    // Génère et stocke un code (10 min)
     function storeResetCode(email, code){
       const item = { code, exp: Date.now() + 10*60*1000 };
-      localStorage.setItem('acn2_reset_'+email, JSON.stringify(item));
+      localStorage.setItem('ac2n_reset_'+email, JSON.stringify(item));
     }
     function readResetCode(email){
       try{
-        const raw = localStorage.getItem('acn2_reset_'+email);
+        const raw = localStorage.getItem('ac2n_reset_'+email);
         if(!raw) return null;
         const obj = JSON.parse(raw);
-        if(Date.now() > obj.exp){ localStorage.removeItem('acn2_reset_'+email); return null; }
+        if(Date.now() > obj.exp){ localStorage.removeItem('ac2n_reset_'+email); return null; }
         return obj.code || null;
       }catch(e){ return null; }
     }
-    function clearReset(email){ localStorage.removeItem('acn2_reset_'+email); }
+    function clearReset(email){ localStorage.removeItem('ac2n_reset_'+email); }
 
     function genCode(){ return String(Math.floor(100000 + Math.random()*900000)); }
 
     async function sendCodeEmail(email, code){
       if(EMAILJS_READY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID){
         try{
-          // ✅ envoie plusieurs clés pour matcher ton template quel que soit le placeholder
-          const params = { to_email: email, code, reset_code: code, site_name: 'ACN2' };
+          const params = { to_email: email, code, reset_code: code, site_name: 'AC2n' };
           const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
           console.log('EmailJS OK', res);
           return true;
         }catch(err){
           console.warn('EmailJS error:', err);
-          // 🔧 fallback dev pour ne pas bloquer l'utilisateur si l'envoi échoue
           alert("(Fallback) Code pour "+email+" = "+code+"\n— L'email n'a pas pu être envoyé. Vérifie EmailJS: Service/Template/Variables/Quota.");
-          return true; // on laisse avancer le flux avec le code affiché
+          return true;
         }
       }else{
-        // Mode dev : affiche le code
         alert("Mode développement : code pour "+email+" = "+code);
         return true;
       }
     }
 
-    // Étape 1 : envoyer code
     step1.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const email = document.getElementById('fpEmail').value.trim().toLowerCase();
@@ -726,7 +1210,6 @@
       showStep(2);
     });
 
-    // Étape 2 : vérifier code
     step2.addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = step2.dataset.email;
@@ -739,7 +1222,6 @@
       showStep(3);
     });
 
-    // Étape 3 : définir nouveau mot de passe
     step3.addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = step3.dataset.email;
@@ -761,7 +1243,6 @@
       showStep(0);
     });
 
-    /* === Filtre live pour n'autoriser que des chiffres (code) === */
     const codeInput = document.getElementById('fpCode');
     if (codeInput){
       codeInput.addEventListener('input', () => {
@@ -769,28 +1250,7 @@
       });
     }
 
-    /* Init */
     renderAccountUI();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Titre de l’onglet -->
-  <title>Test Favicon AC2N</title>
-
-  <!-- Favicon test (image aléatoire) -->
-  <link rel="icon" type="image/png" href="https://picsum.photos/64">
-</head>
-
