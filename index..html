@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ACN2 — Esport Team</title>
+  <meta name="description" content="Site vitrine style Vitality, palette rouge/noir, sections Matchs, Boutique, Joueurs, Partenaires et Shop." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- EmailJS (pour envoi réel du code) -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    :root{
+      --bg:#0F0F10;
+      --accent:#C31418;
+      --accent2:#F03A3E;
+      --text:#F4F4F4;
+      --muted:#D9D9D9;
+      --ring:#C91C21;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:1120px;margin:0 auto;padding:0 20px}
+
+    header{position:sticky;top:0;z-index:50;backdrop-filter: blur(8px);background:rgba(0,0,0,.40);border-bottom:1px solid rgba(255,255,255,.10)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800}
+    .logo{width:40px;height:40px;border-radius:50%;border:2px solid var(--accent2);display:grid;place-items:center}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+    .menu{display:flex;gap:18px;align-items:center;opacity:.95}
+    .btn{padding:10px 16px;border-radius:999px;font-weight:800;border:1px solid transparent;transition:.2s}
+    .btn.primary{background:var(--accent)}
+    .btn.primary:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(201,28,33,.35)}
+    .btn.outline{border-color:var(--accent2)}
+    .btn.outline:hover{background:rgba(240,58,62,.08)}
+
+    .hero{position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;left:-220px;top:-320px;width:820px;height:820px;border-radius:50%;border:14px solid var(--ring);opacity:.25;filter:blur(.5px);pointer-events:none}
+    .hero .bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat;opacity:.20}
+    .hero-inner{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;min-height:78vh;padding:60px 0}
+    h1{font-size:clamp(34px,5.5vw,64px);line-height:1.05;margin:0}
+    .subtitle{opacity:.90;margin:14px 0 24px;font-size:clamp(16px,2.1vw,18px)}
+    .card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(4px);border-radius:18px;padding:22px;box-shadow:0 30px 60px rgba(0,0,0,.45)}
+
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    section{padding:72px 0;border-top:1px solid rgba(255,255,255,.10)}
+    h2{font-size:28px;margin:0 0 10px}
+    .section-head{display:flex;align-items:end;justify-content:space-between}
+    h1,h2,h3,h4,h5,h6{font-weight:800}
+
+    .partner-card{border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:20px;text-align:center;font-size:18px;font-weight:600;background:rgba(255,255,255,.03);transition:.25s}
+    .partner-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.06)}
+
+    footer{padding:36px 0;border-top:1px solid rgba(255,255,255,.10);opacity:.95;font-size:14px}
+
+    /* Modal login */
+    #loginModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(3px);z-index:100;justify-content:center;align-items:center}
+    #loginModal .modal-content{background:#1a1a1a;color:#fff;padding:24px;border-radius:12px;max-width:480px;width:92%;position:relative}
+    #loginModal input,#loginModal textarea,#loginModal select{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #444;background:#111;color:#fff}
+    #loginModal button.close{position:absolute;top:10px;right:10px;background:none;border:none;color:#fff;font-size:18px;cursor:pointer}
+    .tabs{display:flex;gap:8px;margin-bottom:10px}
+    .tab-btn{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#151515;color:#fff;cursor:pointer;font-weight:600}
+    .tab-btn.active{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(240,58,62,.15) inset}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    #navAccount{display:none;align-items:center}
+    #navAvatar{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+
+    .input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #444;background:#111;color:#fff}
+
+    .pwd-box{border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:12px;margin-top:12px;background:rgba(255,255,255,.03)}
+    .pwd-hint{font-size:12px;opacity:.8;margin:4px 0 8px}
+    .small-link{display:inline-block;margin-top:8px;font-size:13px;opacity:.9;text-decoration:underline;text-underline-offset:3px}
+
+    @media(max-width:900px){
+      .menu{display:none}
+      .hero-inner{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){.grid-3{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="logo"><span class="dot"></span></div>
+        <span>ACN2</span>
+      </div>
+      <nav class="menu">
+        <a href="#matches">Matchs</a>
+        <a href="#shop">Boutique</a>
+        <a href="#joueurs">Joueurs</a>
+        <a href="#partners">Partenaires</a>
+
+        <a href="#account" id="navAccount" title="Mon compte">
+          <img id="navAvatar" src="https://i.pravatar.cc/100" alt="Mon compte">
+        </a>
+
+        <a href="#shop" class="btn primary">Shop</a>
+        <a href="#" id="openLogin" class="btn outline">Se connecter</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="bg" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div>
+          <h1>Dominons la scène <span style="color:var(--accent2)">esport</span></h1>
+          <p class="subtitle">AC2N Plonge au cœur du gaming. Découvertes, univers uniques et communauté soudée.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <a class="btn primary" href="#matches">Prochains matchs</a>
+            <a class="btn outline" href="#shop">Boutique</a>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://i.postimg.cc/XqMqscFK/3a447a05-3232-4056-88cf-41c92ad76e8f.png" alt="Logo ACN2" style="width:100%;max-width:420px;margin:0 auto;border-radius:12px;" />
+        </div>
+      </div>
+    </section>
+
+    <section id="matches">
+      <div class="container">
+        <div class="section-head">
+          <h2>Matchs</h2>
+          <a href="#" style="text-decoration:underline; text-underline-offset:4px">Voir tout</a>
+        </div>
+        <div class="grid-3" style="margin-top:18px"></div>
+      </div>
+    </section>
+
+    <section id="joueurs">
+      <div class="container">
+        <h2>Joueurs</h2>
+        <div class="grid-3" style="margin-top:18px"></div>
+      </div>
+    </section>
+
+    <section id="partners">
+      <div class="container">
+        <h2>Partenaires</h2>
+        <div class="grid-3" style="margin-top:18px">
+          <a href="https://www.instant-gaming.com/fr/?igr=AC2NGAMING" target="_blank" class="partner-card">Instant Gaming</a>
+          <a href="https://fragcase.com/" target="_blank" class="partner-card">FragCase <br><span style="font-size:14px;opacity:.8">Code promo : <b>AC2N</b></span></a>
+          <a href="https://ac2ngaming.roxorgamer.com/" target="_blank" class="partner-card">RoxorGamer</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="shop">
+      <div class="container">
+        <div class="card" style="display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div>
+            <h3 style="margin:0;font-size:26px">Nouveaux maillots ACN2</h3>
+            <p style="margin:8px 0 0;opacity:.85">Représente la team avec le drop rouge & noir.</p>
+          </div>
+          <a class="btn primary" href="#">Accéder au shop</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Mon compte ===== -->
+    <section id="account" style="display:none">
+      <div class="container">
+        <h2>Mon compte</h2>
+
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:12px">
+            <img id="accAvatar" src="https://i.pravatar.cc/100" alt="Avatar" style="width:60px;height:60px;border-radius:50%;border:2px solid rgba(255,255,255,.25)">
+            <div>
+              <div style="font-weight:800">Pseudo : <span id="accPseudo">—</span></div>
+              <div style="opacity:.8;font-size:14px">ID : <span id="accId">—</span></div>
+            </div>
+          </div>
+          <button id="btnLogout" class="btn outline">Se déconnecter</button>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 10px">Informations personnelles</h3>
+
+          <div id="accView">
+            <p><b>Prénom :</b> <span id="vFirst">—</span></p>
+            <p><b>Nom :</b> <span id="vLast">—</span></p>
+            <p><b>Adresse :</b> <span id="vAddr">—</span></p>
+            <p><b>Email :</b> <span id="vEmail">—</span></p>
+            <p><b>Pseudo :</b> <span id="vUser">—</span></p>
+            <p><b>Date de naissance :</b> <span id="vBirth">—</span></p>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="btnEdit" class="btn outline">Modifier</button>
+              <button id="btnDelete" class="btn primary" style="background:#b3261e">Supprimer mon compte</button>
+            </div>
+          </div>
+
+          <form id="accEdit" style="display:none;margin-top:8px">
+            <label>Prénom</label>
+            <input id="eFirst" type="text" class="input" required>
+            <label>Nom</label>
+            <input id="eLast" type="text" class="input" required>
+            <label>Adresse</label>
+            <textarea id="eAddr" rows="3" class="input" required></textarea>
+            <label>Pseudo</label>
+            <input id="eUser" type="text" class="input" minlength="3" maxlength="24" required>
+            <label>Date de naissance</label>
+            <input id="eBirth" type="date" class="input" required>
+
+            <div class="pwd-box">
+              <strong>Changer le mot de passe</strong>
+              <p class="pwd-hint">Laisse ces champs vides si tu ne veux pas changer.</p>
+              <label>Mot de passe actuel</label>
+              <input id="pOld" type="password" class="input" placeholder="••••••••">
+              <label>Nouveau mot de passe</label>
+              <input id="pNew" type="password" class="input" minlength="6" placeholder="Au moins 6 caractères">
+              <label>Confirmer</label>
+              <input id="pNew2" type="password" class="input" minlength="6" placeholder="Répète le nouveau mot de passe">
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="btn primary" type="submit">Enregistrer</button>
+              <button class="btn outline" type="button" id="btnCancelEdit">Annuler</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 10px">Choisir mon logo</h3>
+          <p style="opacity:.8;margin:0 0 10px">Sélectionne un logo à afficher sur ton profil.</p>
+          <div style="display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:12px">
+            <img class="pickAvatar" src="https://wallpapers.com/images/hd/cool-xbox-profile-pictures-9dtcc745il694rjs.jpg"  style="width:100%;border-radius:12px;cursor:pointer;border:2px solid transparent">
+            <img class="pickAvatar" src="https://i0.wp.com/wallpaperaccess.com/full/2786608.jpg" style="width:100%;border-radius:12px;cursor:pointer;border:2px solid transparent">
+            <img class="pickAvatar" src="https://img.freepik.com/premium-vector/logo-kid-gamer_573604-730.jpg" style="width:100%;border-radius:12px;cursor:pointer;border:2px solid transparent">
+            <img class="pickAvatar" src="https://img.freepik.com/premium-photo/gamer-logo-icon-with-abstract-background_823200-1111.jpg" style="width:100%;border-radius:12px;cursor:pointer;border:2px solid transparent">
+          </div>
+          <button id="savePick" class="btn outline" style="margin-top:10px">Enregistrer mon logo</button>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 10px">Importer mon propre logo</h3>
+          <p class="muted">PNG/JPG — taille max 1 Mo.</p>
+          <input id="fileAvatar" type="file" accept="image/png,image/jpeg">
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+            <button class="btn primary" id="useFile">Utiliser ce logo</button>
+            <img id="filePreview" alt="" style="width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,.18);display:none">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px">
+      <div>
+        <div class="brand" style="margin-bottom:10px">
+          <div class="logo"><span class="dot"></span></div>
+          <span>ACN2</span>
+        </div>
+        <span style="display:inline-block;background:var(--bg);border:1px solid rgba(255,255,255,.12);padding:8px 10px;border-radius:999px;opacity:.9">
+          © <span id="year"></span> — Tous droits réservés
+        </span>
+      </div>
+      <div style="opacity:.9">
+        <strong>Navigation</strong>
+        <ul style="list-style:none;padding:0;margin:8px 0 0">
+          <li><a href="#matches">Matchs</a></li>
+          <li><a href="#shop">Boutique</a></li>
+          <li><a href="#joueurs">Joueurs</a></li>
+          <li><a href="#partners">Partenaires</a></li>
+        </ul>
+      </div>
+      <div style="opacity:.9">
+        <strong>Contact</strong>
+        <ul style="list-style:none;padding:0;margin:8px 0 0;display:grid;gap:10px">
+          <li style="display:flex;align-items:center;gap:8px;">
+            <span aria-hidden="true" style="display:inline-flex;color:var(--accent);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20.317 4.369A19.79 19.79 0 0016.78 3a13.25 13.25 0 00-.62 1.27 18.63 18.63 0 00-4.32 0A13.08 13.08 0 0011.22 3c-1.251.225-2.47.59-3.64 1.093C4.657 6.518 3.83 9.52 4.06 12.48a19.9 19.9 0 005.997 3.08c .48-.65 .906-1.343 1.27-2.07-.7-.268-1.373-.61-2.01-1.02 .17-.13 .337-.266 .5-.41 1.93 .906 4.07 .906 6 0 .164 .144 .33 .28 .5 .41-.638 .41-1.31 .752-2.01 1.02 .364 .727 .79 1.42 1.27 2.07a19.9 19.9 0 006-3.08c .28-3.56-.59-6.56-2.26-8.11zM9.6 12.7c-.78 0-1.42-.72-1.42-1.61s .63-1.62 1.42-1.62c .79 0 1.43 .72 1.42 1.62 0 .89-.63 1.61-1.42 1.61zm4.8 0c-.79 0-1.42-.72-1.42-1.61s .63-1.62 1.42-1.62c .79 0 1.42 .72 1.42 1.62s-.63 1.61-1.42 1.61z"/></svg>
+            </span>
+            <a href="https://discord.gg/Dfyq5wqn7y" target="_blank" rel="noopener">Rejoindre notre Discord</a>
+          </li>
+          <li style="display:flex;align-items:center;gap:8px;">
+            <span aria-hidden="true" style="display:inline-flex;color:var(--accent);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 2v.01L12 13 4 6.01V6h16zM4 18V8.24l7.4 5.92a1 1 0 001.2 0L20 8.24V18H4z"/></svg>
+            </span>
+            <a href="mailto:Ac2NGaming@gmail.com">Ac2NGaming@gmail.com</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal de connexion / création -->
+  <div id="loginModal">
+    <div class="modal-content">
+      <button class="close" id="closeLogin">✖</button>
+
+      <div class="tabs">
+        <button class="tab-btn active" id="tabLoginBtn">Se connecter</button>
+        <button class="tab-btn" id="tabSignupBtn">Créer un compte</button>
+      </div>
+
+      <!-- Connexion -->
+      <div class="tab-panel active" id="panelLogin">
+        <form id="loginForm" autocomplete="off">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="ex: vous@mail.com" required>
+          <label>Mot de passe</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+
+          <a href="#" id="forgotToggle" class="small-link">Mot de passe oublié ?</a>
+
+          <button type="submit" class="btn primary" style="width:100%;margin-top:10px">Se connecter</button>
+        </form>
+
+        <!-- Étape 1 : demander email -->
+        <form id="forgotStep1" style="display:none;margin-top:10px" autocomplete="off">
+          <div class="pwd-box">
+            <strong>Réinitialiser le mot de passe</strong>
+            <p class="pwd-hint">Entre l’email de ton compte. On t’envoie un code à 6 chiffres (valide 10 min).</p>
+            <label>Email du compte</label>
+            <input type="email" id="fpEmail" placeholder="ex: vous@mail.com" required>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button type="submit" class="btn primary" style="flex:1">Envoyer le code</button>
+              <button type="button" id="forgotCancel1" class="btn outline">Annuler</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Étape 2 : saisir code -->
+        <form id="forgotStep2" style="display:none;margin-top:10px" autocomplete="off">
+          <div class="pwd-box">
+            <strong>Code de vérification</strong>
+            <p class="pwd-hint">Saisi le code reçu par email.</p>
+            <label>Code à 6 chiffres</label>
+            <!-- pattern corrigé -->
+            <input type="text" id="fpCode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required title="Entrez 6 chiffres">
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button type="submit" class="btn primary" style="flex:1">Vérifier</button>
+              <button type="button" id="forgotBack1" class="btn outline">Retour</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Étape 3 : nouveau mot de passe -->
+        <form id="forgotStep3" style="display:none;margin-top:10px" autocomplete="off">
+          <div class="pwd-box">
+            <strong>Nouveau mot de passe</strong>
+            <input type="password" id="fpNew" minlength="6" placeholder="Au moins 6 caractères" required>
+            <label>Confirmer le mot de passe</label>
+            <input type="password" id="fpNew2" minlength="6" placeholder="Répète le nouveau mot de passe" required>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button type="submit" class="btn primary" style="flex:1">Réinitialiser</button>
+              <button type="button" id="forgotBack2" class="btn outline">Retour</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Création de compte -->
+      <div class="tab-panel" id="panelSignup">
+        <form id="signupForm" autocomplete="off">
+          <label>Adresse Email</label>
+          <input type="email" id="suEmail" placeholder="ex: vous@mail.com" required>
+          <label>Mot de passe</label>
+          <input type="password" id="suPassword" placeholder="••••••••" minlength="6" required>
+          <label>Nom</label>
+          <input type="text" id="suLastName" placeholder="Dupont" required>
+          <label>Prénom</label>
+          <input type="text" id="suFirstName" placeholder="Alex" required>
+          <label>Adresse postale</label>
+          <textarea id="suAddress" rows="3" placeholder="12 rue des Esports, 75000 Paris" required></textarea>
+          <label>Pseudo</label>
+          <input type="text" id="suUsername" placeholder="AC2N_Alex" minlength="3" maxlength="24" required>
+          <label>Date de naissance</label>
+          <input type="date" id="suBirth" required>
+          <button type="submit" class="btn primary" style="width:100%;margin-top:10px">Créer mon compte</button>
+        </form>
+      </div>
+
+      <div id="authFeedback" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ===== Config EmailJS (facultatif mais recommandé) =====
+       - EMAILJS_PUBLIC_KEY : clé publique (ex: "xxxxxxxxxxxxxxxxx")
+       - EMAILJS_SERVICE_ID : service (ex: "service_xxx")
+       - EMAILJS_TEMPLATE_ID: template (ex: "template_xxx") avec variables: to_email, code
+       Si ces 3 valeurs restent vides, le code s'affichera via alert() pour test.
+    */
+    const EMAILJS_PUBLIC_KEY = "d89KnDXgorOiAo_Zq";             // <-- ta clé publique
+    const EMAILJS_SERVICE_ID = "service_iy06pp9";               // <-- ton service id
+    const EMAILJS_TEMPLATE_ID = "template_08rnz6r";             // <-- ton template id
+    let EMAILJS_READY = false;
+    try{
+      if(EMAILJS_PUBLIC_KEY){
+        // ✅ compat v3/v4 (n'affecte pas le reste)
+        if (typeof emailjs !== 'undefined' && emailjs && typeof emailjs.init === 'function') {
+          // certains environnements exigent l'objet { publicKey }
+          emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+          EMAILJS_READY = true;
+        }
+      }
+    }catch(e){ EMAILJS_READY = false; }
+
+    /* ====== Modal + onglets ====== */
+    const modal = document.getElementById('loginModal');
+    document.getElementById('openLogin').onclick = (e)=>{ e.preventDefault(); modal.style.display='flex'; };
+    document.getElementById('closeLogin').onclick = ()=> modal.style.display='none';
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') modal.style.display='none'; });
+
+    const tabLoginBtn = document.getElementById('tabLoginBtn');
+    const tabSignupBtn = document.getElementById('tabSignupBtn');
+    const panelLogin = document.getElementById('panelLogin');
+    const panelSignup = document.getElementById('panelSignup');
+    function setTab(isLogin){
+      tabLoginBtn.classList.toggle('active', isLogin);
+      tabSignupBtn.classList.toggle('active', !isLogin);
+      panelLogin.classList.toggle('active', isLogin);
+      panelSignup.classList.toggle('active', !isLogin);
+    }
+    tabLoginBtn.onclick = ()=> setTab(true);
+    tabSignupBtn.onclick = ()=> setTab(false);
+
+    /* ====== Storage ====== */
+    const USERS_KEY = 'acn2_users';
+    const CURRENT_KEY = 'acn2_current_email';
+    function loadUsers(){ try{ return JSON.parse(localStorage.getItem(USERS_KEY)) || [] }catch(e){ return [] } }
+    function saveUsers(list){ localStorage.setItem(USERS_KEY, JSON.stringify(list)); }
+    function setCurrent(email){ localStorage.setItem(CURRENT_KEY, email); }
+    function getCurrent(){
+      const email = localStorage.getItem(CURRENT_KEY);
+      if(!email) return null;
+      return loadUsers().find(u=>u.email===email) || null;
+    }
+    function generateId(){
+      const rnd = (crypto?.getRandomValues ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.random()*1e9)
+                  .toString(16).slice(-6).toUpperCase();
+      return 'ACN2-' + rnd;
+    }
+
+    const fb = document.getElementById('authFeedback');
+    function showMsg(text, ok=true){
+      fb.innerHTML = '<div class="card" style="padding:12px;border:1px solid '+(ok?'rgba(76,175,80,.35)':'rgba(240,58,62,.45)')+'">'+text+'</div>';
+    }
+
+    /* ====== UI compte ====== */
+    function renderAccountUI(){
+      const user = getCurrent();
+      const navAcc = document.getElementById('navAccount');
+      const navAvatar = document.getElementById('navAvatar');
+      const openBtn = document.getElementById('openLogin');
+      const accountSec = document.getElementById('account');
+
+      if(!user){
+        if(navAcc) navAcc.style.display = 'none';
+        if(openBtn) openBtn.style.display = '';
+        if(accountSec) accountSec.style.display = 'none';
+        return;
+      }
+
+      if(openBtn) openBtn.style.display = 'none';
+      if(navAcc){
+        navAcc.style.display = 'inline-flex';
+        navAvatar.src = user.avatar || 'https://i.pravatar.cc/100';
+      }
+      if(accountSec){
+        accountSec.style.display = '';
+        document.getElementById('accPseudo').textContent = user.username || '—';
+        document.getElementById('accId').textContent = user.id || '—';
+        document.getElementById('accAvatar').src = user.avatar || 'https://i.pravatar.cc/100';
+        document.getElementById('vFirst').textContent = user.firstName || '—';
+        document.getElementById('vLast').textContent  = user.lastName  || '—';
+        document.getElementById('vAddr').textContent  = user.address   || '—';
+        document.getElementById('vEmail').textContent = user.email     || '—';
+        document.getElementById('vUser').textContent  = user.username  || '—';
+        document.getElementById('vBirth').textContent = user.birth     || '—';
+
+        document.getElementById('eFirst').value = user.firstName || '';
+        document.getElementById('eLast').value  = user.lastName  || '';
+        document.getElementById('eAddr').value  = user.address   || '';
+        document.getElementById('eUser').value  = user.username  || '';
+        document.getElementById('eBirth').value = user.birth     || '';
+        ['pOld','pNew','pNew2'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+      }
+    }
+
+    /* ====== Signup ====== */
+    document.getElementById('signupForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('suEmail').value.trim().toLowerCase();
+      const password = document.getElementById('suPassword').value;
+      const lastName = document.getElementById('suLastName').value.trim();
+      const firstName = document.getElementById('suFirstName').value.trim();
+      const address = document.getElementById('suAddress').value.trim();
+      const username = document.getElementById('suUsername').value.trim();
+      const birth = document.getElementById('suBirth').value;
+
+      if(username.length < 3){ showMsg("Le pseudo doit contenir au moins 3 caractères.", false); return; }
+      if(password.length < 6){ showMsg("Le mot de passe doit contenir au moins 6 caractères.", false); return; }
+
+      const users = loadUsers();
+      if(users.some(u => u.email === email)){ showMsg("Un compte existe déjà avec cet email.", false); return; }
+      if(users.some(u => u.username.toLowerCase() === username.toLowerCase())){ showMsg("Ce pseudo est déjà pris.", false); return; }
+
+      const id = generateId();
+      users.push({ id, email, password, lastName, firstName, address, username, birth, avatar:null, createdAt: new Date().toISOString() });
+      saveUsers(users);
+
+      setCurrent(email);
+      showMsg('Compte créé ✅ (ID: <b>'+id+'</b>)');
+      modal.style.display = 'none';
+      renderAccountUI();
+      document.getElementById('signupForm').reset();
+    });
+
+    /* ====== Login ====== */
+    document.getElementById('loginForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const password = document.getElementById('loginPassword').value;
+
+      const users = loadUsers();
+      const user = users.find(u => u.email === email && u.password === password);
+      if(!user){ showMsg("Identifiants invalides.", false); return; }
+
+      setCurrent(email);
+      modal.style.display = 'none';
+      renderAccountUI();
+      document.getElementById('loginForm').reset();
+    });
+
+    /* ====== Déconnexion ====== */
+    document.getElementById('btnLogout').addEventListener('click', ()=>{
+      localStorage.removeItem(CURRENT_KEY);
+      renderAccountUI();
+    });
+
+    /* ====== Edit compte ====== */
+    const viewBox = document.getElementById('accView');
+    const editForm = document.getElementById('accEdit');
+    document.getElementById('btnEdit').onclick = ()=>{ viewBox.style.display='none'; editForm.style.display='block'; };
+    document.getElementById('btnCancelEdit').onclick = ()=>{ editForm.style.display='none'; viewBox.style.display='block'; };
+
+    document.getElementById('accEdit').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const users = loadUsers();
+      const current = getCurrent(); if(!current) return;
+
+      const newUsername = document.getElementById('eUser').value.trim();
+      if(users.some(u => u.email!==current.email && u.username.toLowerCase()===newUsername.toLowerCase())){
+        alert("Ce pseudo est déjà pris."); return;
+      }
+
+      const idx = users.findIndex(u => u.email===current.email);
+      users[idx] = {
+        ...current,
+        firstName: document.getElementById('eFirst').value.trim(),
+        lastName : document.getElementById('eLast').value.trim(),
+        address  : document.getElementById('eAddr').value.trim(),
+        username : newUsername,
+        birth    : document.getElementById('eBirth').value
+      };
+
+      const oldPwd = document.getElementById('pOld').value;
+      const newPwd = document.getElementById('pNew').value;
+      const newPwd2 = document.getElementById('pNew2').value;
+      const wantsChange = oldPwd || newPwd || newPwd2;
+
+      if(wantsChange){
+        if(oldPwd !== current.password){ alert("Mot de passe actuel incorrect."); return; }
+        if(!newPwd || newPwd.length < 6){ alert("Le nouveau mot de passe doit contenir au moins 6 caractères."); return; }
+        if(newPwd !== newPwd2){ alert("La confirmation du mot de passe ne correspond pas."); return; }
+        users[idx].password = newPwd;
+      }
+
+      saveUsers(users);
+      renderAccountUI();
+      editForm.style.display='none';
+      viewBox.style.display='block';
+      if(wantsChange) alert("Mot de passe mis à jour ✅");
+    });
+
+    /* ====== Suppression de compte ====== */
+    document.getElementById('btnDelete').addEventListener('click', ()=>{
+      if(!confirm("Supprimer définitivement ce compte ?")) return;
+      const users = loadUsers();
+      const current = getCurrent(); if(!current) return;
+      const kept = users.filter(u => u.email !== current.email);
+      saveUsers(kept);
+      localStorage.removeItem(CURRENT_KEY);
+      alert("Compte supprimé.");
+      renderAccountUI();
+      window.location.hash = '';
+    });
+
+    /* ====== Choix avatar ====== */
+    let pickedAvatar = null;
+    document.querySelectorAll('.pickAvatar').forEach(img=>{
+      img.addEventListener('click', ()=>{
+        document.querySelectorAll('.pickAvatar').forEach(i=>i.style.borderColor='transparent');
+        img.style.borderColor='var(--accent2)';
+        pickedAvatar = img.src;
+      });
+    });
+    document.getElementById('savePick').addEventListener('click', ()=>{
+      const current = getCurrent(); if(!current || !pickedAvatar) return;
+      const users = loadUsers();
+      const idx = users.findIndex(u => u.email===current.email);
+      users[idx].avatar = pickedAvatar;
+      saveUsers(users);
+      renderAccountUI();
+      pickedAvatar = null;
+      document.querySelectorAll('.pickAvatar').forEach(i=>i.style.borderColor='transparent');
+    });
+
+    /* ====== Upload avatar ====== */
+    const fileInput = document.getElementById('fileAvatar');
+    const filePreview = document.getElementById('filePreview');
+    fileInput.addEventListener('change', ()=>{
+      const f = fileInput.files[0];
+      if(!f){filePreview.style.display='none';return;}
+      if(!/^image\/(png|jpeg)$/.test(f.type)){ alert("Fichier non supporté (PNG/JPG uniquement)."); fileInput.value=''; return; }
+      if(f.size > 1_000_000){ alert("Fichier trop lourd (max 1 Mo)."); fileInput.value=''; return; }
+      const reader = new FileReader();
+      reader.onload = ()=>{ filePreview.src = reader.result; filePreview.style.display='block'; };
+      reader.readAsDataURL(f);
+    });
+    document.getElementById('useFile').addEventListener('click', ()=>{
+      const f = fileInput.files[0];
+      if(!f){ alert("Choisis un fichier."); return; }
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        const current = getCurrent(); if(!current) return;
+        const users = loadUsers();
+        const idx = users.findIndex(u => u.email===current.email);
+        users[idx].avatar = reader.result;
+        saveUsers(users);
+        renderAccountUI();
+        fileInput.value=''; filePreview.style.display='none';
+      };
+      reader.readAsDataURL(f);
+    });
+
+    /* ====== Mot de passe oublié – envoi code & étapes ====== */
+    const forgotToggle = document.getElementById('forgotToggle');
+    const loginForm = document.getElementById('loginForm');
+    const step1 = document.getElementById('forgotStep1');
+    const step2 = document.getElementById('forgotStep2');
+    const step3 = document.getElementById('forgotStep3');
+
+    function showStep(n){
+      loginForm.style.display = (n===0)?'block':'none';
+      step1.style.display     = (n===1)?'block':'none';
+      step2.style.display     = (n===2)?'block':'none';
+      step3.style.display     = (n===3)?'block':'none';
+    }
+
+    forgotToggle.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const le = document.getElementById('loginEmail').value.trim();
+      document.getElementById('fpEmail').value = le || '';
+      showStep(1);
+    });
+    document.getElementById('forgotCancel1').addEventListener('click', ()=> showStep(0));
+    document.getElementById('forgotBack1').addEventListener('click', ()=> showStep(1));
+    document.getElementById('forgotBack2').addEventListener('click', ()=> showStep(2));
+
+    // Génère et stocke un code (10 min)
+    function storeResetCode(email, code){
+      const item = { code, exp: Date.now() + 10*60*1000 };
+      localStorage.setItem('acn2_reset_'+email, JSON.stringify(item));
+    }
+    function readResetCode(email){
+      try{
+        const raw = localStorage.getItem('acn2_reset_'+email);
+        if(!raw) return null;
+        const obj = JSON.parse(raw);
+        if(Date.now() > obj.exp){ localStorage.removeItem('acn2_reset_'+email); return null; }
+        return obj.code || null;
+      }catch(e){ return null; }
+    }
+    function clearReset(email){ localStorage.removeItem('acn2_reset_'+email); }
+
+    function genCode(){ return String(Math.floor(100000 + Math.random()*900000)); }
+
+    async function sendCodeEmail(email, code){
+      if(EMAILJS_READY && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID){
+        try{
+          // ✅ envoie plusieurs clés pour matcher ton template quel que soit le placeholder
+          const params = { to_email: email, code, reset_code: code, site_name: 'ACN2' };
+          const res = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+          console.log('EmailJS OK', res);
+          return true;
+        }catch(err){
+          console.warn('EmailJS error:', err);
+          // 🔧 fallback dev pour ne pas bloquer l'utilisateur si l'envoi échoue
+          alert("(Fallback) Code pour "+email+" = "+code+"\n— L'email n'a pas pu être envoyé. Vérifie EmailJS: Service/Template/Variables/Quota.");
+          return true; // on laisse avancer le flux avec le code affiché
+        }
+      }else{
+        // Mode dev : affiche le code
+        alert("Mode développement : code pour "+email+" = "+code);
+        return true;
+      }
+    }
+
+    // Étape 1 : envoyer code
+    step1.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('fpEmail').value.trim().toLowerCase();
+      const users = loadUsers();
+      if(!users.some(u=>u.email===email)){ showMsg("Aucun compte trouvé avec cet email.", false); return; }
+      const code = genCode();
+      storeResetCode(email, code);
+      const ok = await sendCodeEmail(email, code);
+      if(!ok){ showMsg("Impossible d'envoyer l'email pour le moment.", false); return; }
+      showMsg("Code envoyé ✅ Vérifie ta boîte mail (pense au spam).");
+      step2.dataset.email = email;
+      showStep(2);
+    });
+
+    // Étape 2 : vérifier code
+    step2.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = step2.dataset.email;
+      const codeInput = document.getElementById('fpCode');
+      const code = (codeInput.value || '').trim();
+      const stored = readResetCode(email);
+      if(!stored){ showMsg("Code expiré. Redemande un nouveau code.", false); showStep(1); return; }
+      if(code !== stored){ showMsg("Code incorrect.", false); return; }
+      step3.dataset.email = email;
+      showStep(3);
+    });
+
+    // Étape 3 : définir nouveau mot de passe
+    step3.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const email = step3.dataset.email;
+      const np = document.getElementById('fpNew').value;
+      const np2 = document.getElementById('fpNew2').value;
+      if(np.length < 6){ showMsg("Le nouveau mot de passe doit contenir au moins 6 caractères.", false); return; }
+      if(np !== np2){ showMsg("La confirmation ne correspond pas.", false); return; }
+
+      const users = loadUsers();
+      const idx = users.findIndex(u=>u.email===email);
+      if(idx===-1){ showMsg("Compte introuvable.", false); return; }
+      users[idx].password = np;
+      saveUsers(users);
+      clearReset(email);
+      showMsg("Mot de passe réinitialisé ✅ Tu peux te reconnecter.");
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('loginPassword').value = '';
+      step3.reset(); document.getElementById('fpCode').value='';
+      showStep(0);
+    });
+
+    /* === Filtre live pour n'autoriser que des chiffres (code) === */
+    const codeInput = document.getElementById('fpCode');
+    if (codeInput){
+      codeInput.addEventListener('input', () => {
+        codeInput.value = codeInput.value.replace(/\D+/g, '').slice(0, 6);
+      });
+    }
+
+    /* Init */
+    renderAccountUI();
+  </script>
+</body>
+</html>
